@@ -4,8 +4,6 @@
     <string name="app_name">CounterA1</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="new_button">New</string>
-    <string name="edit_button">Edit Name</string>
     <string name="reset_button">Reset</string>
       <string name="counter_blank">Counter N</string>
       <string name="count_num_blank">0</string>

@@ -4,14 +4,15 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-  <item android:id="@+id/add_new_counter"
-        android:icon="@drawable/ic_action_new"
-        android:title="@string/action_new"
-        android:showAsAction="ifRoom" />
   <item android:id="@+id/remove_counter"
         android:icon="@drawable/ic_action_remove"
         android:title="@string/action_remove"
         android:showAsAction="ifRoom" />
+  <item android:id="@+id/add_new_counter"
+        android:icon="@drawable/ic_action_new"
+        android:title="@string/action_new"
+        android:showAsAction="ifRoom" />
+
         
 
 </menu>
