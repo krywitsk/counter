@@ -10,5 +10,7 @@
       <string name="counter_blank">Counter N</string>
       <string name="count_num_blank">0</string>
       <string name="increment_button">+</string>
+      <string name="action_new">New Counter</string>
+      <string name="action_remove">Remove Counter</string>
 
 </resources>
