@@ -3,9 +3,12 @@ package com.krywitsk.countera1;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
+	private int counterIndex = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -19,4 +22,19 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	
+    @Override
+    //for action bar buttons
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.add_new_counter:
+                    
+            case R.id.remove_counter:
+                    //remove counter
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
