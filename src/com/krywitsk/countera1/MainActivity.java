@@ -1,6 +1,9 @@
 package com.krywitsk.countera1;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -9,7 +12,10 @@ import android.view.MenuItem;
 public class MainActivity extends FragmentActivity {
 	
 	CounterStatePagerAdapter adapter;
+
 	ViewPager viewPager;
+	
+	ArrayList<Fragment> counterFrags; 
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,7 +32,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main_menu, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 	
@@ -36,7 +42,10 @@ public class MainActivity extends FragmentActivity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.add_new_counter:
-
+	        	Fragment testFrag = adapter.getItem(0);
+	        	
+	        case R.id.remove_counter:
+	        	//remove counter
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
