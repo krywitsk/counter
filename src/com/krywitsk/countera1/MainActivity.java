@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -18,11 +19,8 @@ public class MainActivity extends Activity {
 
 	private int counterIndex;
 	private CounterArray counterArray;
-	
-	private final String FILENAME = "savedata.txt";
-	FileOutputStream outputStream;
-	FileInputStream inputStream;
-	
+	private String FILENAME;
+
 	TextView counterValue;
 	TextView counterName;
 	
@@ -31,26 +29,15 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		File mydir = getFilesDir();
+		FILENAME = mydir.toString() + "/savedata.data";
 		counterIndex = 0;
 		counterArray = new CounterArray();
 
-		try {
-			inputStream = openFileInput(FILENAME);
-			counterArray.restorePersistent(inputStream);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-
 		
-		
-		try {
-			outputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-		} catch (Exception e) {
-			//error creating file
-			e.printStackTrace();
-		}
+		counterArray.restorePersistent(FILENAME);
+	
+
 	    
 	    	    
 		counterValue = (TextView) findViewById(R.id.counter_value);
@@ -77,9 +64,11 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.add_new_counter:
-                    
+                    counterArray.addCounter("TestC");
             case R.id.remove_counter:
-                    //remove counter
+                    if (!counterArray.isEmpty()) {
+                    	//counterArray.removeCounter(counterArray.getSize()-1);
+                    }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -90,27 +79,24 @@ public class MainActivity extends Activity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        counterArray.savePersistent(outputStream);
-        System.out.println("Saved!");
+        counterArray.savePersistent(FILENAME);
+
         
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
     
-    @Override
-    public void onStop() {
-    	//outputStream.close();
-    }
+
     
     public void resetButton(View view) {
     	counterArray.getCounter(counterIndex).resetCount();
     	counterValue.setText(counterArray.getCounter(counterIndex).getCount().toString());
-    	counterArray.savePersistent(outputStream);
+    	counterArray.savePersistent(FILENAME);
     }
     
     public void incrementButton(View view) {
     	counterArray.getCounter(counterIndex).incrementCount();
     	counterValue.setText(counterArray.getCounter(counterIndex).getCount().toString());
-    	counterArray.savePersistent(outputStream);
+    	counterArray.savePersistent(FILENAME);
     }
 }
