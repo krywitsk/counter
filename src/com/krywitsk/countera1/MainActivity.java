@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,25 +20,40 @@ public class MainActivity extends Activity {
 
 	private int counterIndex;
 	private CounterArray counterArray;
-	private String FILENAME;
+
 
 	TextView counterValue;
 	TextView counterName;
+	
+
+	FileOutputStream outputStream;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		String FILENAME = "savedata";
 		
-		File mydir = getFilesDir();
-		FILENAME = mydir.toString() + "/savedata.data";
 		counterIndex = 0;
 		counterArray = new CounterArray();
-
-		
-		counterArray.restorePersistent(FILENAME);
-	
-
+		try {
+			FileInputStream inputStream = new FileInputStream (new File(FILENAME));
+			System.out.println(inputStream.toString());
+			
+			if (inputStream != null) {
+				counterArray.restorePersistent(inputStream);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			Log.e("Files: ", "Could not find inputStream");	
+			}
+			
+		try {
+			outputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			Log.e("Files: ", "Could not create outputStream");	
+		}
 	    
 	    	    
 		counterValue = (TextView) findViewById(R.id.counter_value);
@@ -79,7 +95,7 @@ public class MainActivity extends Activity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        counterArray.savePersistent(FILENAME);
+        counterArray.savePersistent(outputStream);
 
         
         // Always call the superclass so it can save the view hierarchy state
@@ -91,12 +107,12 @@ public class MainActivity extends Activity {
     public void resetButton(View view) {
     	counterArray.getCounter(counterIndex).resetCount();
     	counterValue.setText(counterArray.getCounter(counterIndex).getCount().toString());
-    	counterArray.savePersistent(FILENAME);
+    	counterArray.savePersistent(outputStream);
     }
     
     public void incrementButton(View view) {
     	counterArray.getCounter(counterIndex).incrementCount();
     	counterValue.setText(counterArray.getCounter(counterIndex).getCount().toString());
-    	counterArray.savePersistent(FILENAME);
+    	counterArray.savePersistent(outputStream);
     }
 }

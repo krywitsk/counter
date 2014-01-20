@@ -1,21 +1,15 @@
 package com.krywitsk.countera1;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Date;
-
-import android.content.Context;
 
 public class CounterArray {
 	
 	private ArrayList<Counter> counters;
-	private final String SEPERATOR = "###";
 	
 	public CounterArray() {
 		counters = new ArrayList<Counter>();
@@ -51,63 +45,73 @@ public class CounterArray {
 		return counters.size();
 	}
 	
-
-	public void savePersistent(String filename) {
-		try {
-			File file = new File(filename);
-			FileOutputStream fileStream = new FileOutputStream(file);
-			OutputStreamWriter outStream = new OutputStreamWriter(fileStream);
-			
-			//write name and date data
-			for (Counter item : counters) {
-				System.out.println(item.getName());
-				outStream.write(item.getName());
-				for (Date tstamp : item.getTimeStamps()) {
-					outStream.write(tstamp.toString());
-
-				}
-				outStream.write(SEPERATOR);	
-			}
-			fileStream.close();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
+	public String convertCounterArrayToString() {
+		String temp = new String();
+		for(Counter counter : counters) {
+			temp.concat(counter.convertToString());
+			temp.concat("%");
+		}
+		return temp;
 	}
 	
-	public void restorePersistent(String filename) {
+	public ArrayList<Counter> convertStringToCounterArray(String strIn) {
 		
+		ArrayList<Counter> tempArray = new ArrayList<Counter>();
+		
+		//Separate string into separate counter strings
+		String[] counterStrings = strIn.split("%");
+		
+		for (String string : counterStrings) {
+			String[] counterStr = string.split("^");
+			
+			Counter tempCounter = new Counter(counterStr[0]);
+			
+			for (int i = 1; i < counterStr.length; ++i) {
+				tempCounter.addTimeStamp(counterStr[i]);
+			}	
+			tempArray.add(tempCounter);
+		}
+		return tempArray;
+	}
+
+	public void savePersistent(FileOutputStream outputStream) {
 		try {
-			//instantiate our file reader objects
-			FileInputStream fileStream = new FileInputStream(filename);
-
-			InputStreamReader iReader = new InputStreamReader(fileStream);
-			BufferedReader bReader = new BufferedReader(iReader);
+			outputStream.write(this.convertCounterArrayToString().getBytes());
+			outputStream.close();
 			
-			String readLine = bReader.readLine();
-
-			/*
-			ArrayList<Counter> counterTemp = new ArrayList<Counter>();
-			
-			while (readLine != null) {
-				counterTemp.add(new Counter(readLine));
-				readLine = bReader.readLine();
-				System.out.println("Read something!");
-				while (readLine != SEPERATOR) {
-					counterTemp.get(counterTemp.size()-1).addTimeStampString(readLine);
-				}
-				readLine = bReader.readLine();
-				readLine = bReader.readLine();
-				//System.out.println(readLine);
-			}
-			fileStream.close();
-			this.counters = counterTemp;
-			*/
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void restorePersistent(FileInputStream inputStream) {
+		
+		System.out.println("Attempting to restore");
+		StringBuffer strBuf = new StringBuffer("");
+		
+			//instantiate our file reader objects
+			try {
+				
+				byte[] buffer = new byte[1024];
+				while (inputStream.read(buffer) != -1) {
+					strBuf.append(new String(buffer));
+				}
+				inputStream.close();
+
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//convert string back to counter array
+			this.counters = convertStringToCounterArray(strBuf.toString());
 	}
 }

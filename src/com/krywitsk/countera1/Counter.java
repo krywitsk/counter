@@ -1,7 +1,5 @@
 package com.krywitsk.countera1;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 
@@ -28,14 +26,10 @@ public class Counter {
 		return timeStamps;
 	}
 	
-	public void addTimeStampString(String timeIn) {
-		//SimpleDateFormat fDate = new SimpleDateFormat("EEE-MMM-dd-HH-mm-ss-");
-		//Date tempDate;
-		//tempDate = fDate.parse(timeIn);
+	public void addTimeStamp(String timeIn) {
 		timeStamps.add(new Date(timeIn));
-
 	}
-	
+		
 	public void resetCount() {
 		timeStamps.clear();
 	}
@@ -48,4 +42,13 @@ public class Counter {
 		this.name = name;
 	}	
 
+	public String convertToString() {
+		String temp = new String(this.name);
+		for(Date dates : timeStamps) {
+			temp.concat("^");
+			temp.concat(dates.toString());
+		}
+		return temp;
+	}
+	
 }
