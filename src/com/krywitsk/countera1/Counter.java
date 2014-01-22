@@ -9,8 +9,9 @@ public class Counter {
 	private String name;
 	ArrayList<Date> timeStamps;
 	
-	public Counter(String name) {
-		this.name = name;
+	public Counter(String nameIn) {
+
+		this.name = nameIn;
 		timeStamps = new ArrayList<Date>();
 	}
 	
@@ -43,12 +44,13 @@ public class Counter {
 	}	
 
 	public String convertToString() {
-		String temp = new String(this.name);
+		StringBuilder temp = new StringBuilder();
+		temp.append(name);
 		for(Date dates : timeStamps) {
-			temp.concat("^");
-			temp.concat(dates.toString());
+			temp.append("%");
+			temp.append(dates.toString());
 		}
-		return temp;
+		return temp.toString();
 	}
 	
 }

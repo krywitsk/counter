@@ -1,70 +1,75 @@
 package com.krywitsk.countera1;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	private int counterIndex;
-	private CounterArray counterArray;
+	private static int counterIndex;
 
+	public static final String SAVED_PREFS = "SavedPrefs";
+	public static final String SAVE_INDEX = "SaveInd";
+	public static final String NUM_COUNTERS = "numCounters";
+	
+	private ArrayList<Counter> counterArray;
 
 	TextView counterValue;
 	TextView counterName;
 	
-
-	FileOutputStream outputStream;
+	EditText alertIn;
+	
+	final String[] names = {"One","Two","Three"};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		String FILENAME = "savedata";
 		
+		//need to restore index as well
 		counterIndex = 0;
-		counterArray = new CounterArray();
-		try {
-			FileInputStream inputStream = new FileInputStream (new File(FILENAME));
-			System.out.println(inputStream.toString());
-			
-			if (inputStream != null) {
-				counterArray.restorePersistent(inputStream);
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			Log.e("Files: ", "Could not find inputStream");	
-			}
-			
-		try {
-			outputStream = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			Log.e("Files: ", "Could not create outputStream");	
-		}
-	    
-	    	    
+		
 		counterValue = (TextView) findViewById(R.id.counter_value);
 		counterName = (TextView) findViewById(R.id.counter_name);
 		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 		
-		//###########test code #################### creates default counter
-		if (counterArray.isEmpty()) {
-			counterIndex = counterArray.addCounter("Default");
+		ArrayList<Counter> newCounterArray = loadFromFile();
+		if (newCounterArray == null) {
+			counterIndex = 0;
+			counterArray = new ArrayList<Counter>();
+			counterArray.add(new Counter("DEFAULT"));
+			counterName.setText(counterArray.get(counterIndex).getName());
+			counterValue.setText(counterArray.get(counterIndex).getCount().toString());
+
+		} else {
+			counterArray = newCounterArray;
+			//NOT ALWAYS
+			counterIndex = counterArray.size()-1;
+			//########
+			counterName.setText(counterArray.get(counterIndex).getName());
+			counterValue.setText(counterArray.get(counterIndex).getCount().toString());
 		}
-		//#################################################################
+		
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
 	}
 
 	@Override
@@ -78,41 +83,125 @@ public class MainActivity extends Activity {
     //for action bar buttons
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
+        switch (item.getItemId()) { 
             case R.id.add_new_counter:
-                    counterArray.addCounter("TestC");
+            	if (counterIndex >= 0) {
+            		//test code
+            		counterIndex++;
+            		System.out.println(counterIndex);
+            		counterArray.add(new Counter("CHANGEME"));
+            		counterName.setText(counterArray.get(counterIndex).getName());
+    				counterValue.setText(counterArray.get(counterIndex).getCount().toString());
+            	}
+
             case R.id.remove_counter:
-                    if (!counterArray.isEmpty()) {
-                    	//counterArray.removeCounter(counterArray.getSize()-1);
-                    }
+            	if (counterArray.size() >= 0) {
+            		counterArray.remove(counterIndex);
+            		counterIndex--;
+            	}
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    //method for saving activity state temporarily
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        counterArray.savePersistent(outputStream);
-
-        
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
+    private ArrayList<Counter> loadFromFile() {
+    	
+    	ArrayList<Counter> newCounter;
+    	ArrayList<String> tempStringArray = new ArrayList<String>();
+    	
+        SharedPreferences restore = getPreferences(0);
+        Integer countSize = restore.getInt(NUM_COUNTERS, 0);
+        counterIndex = restore.getInt(SAVE_INDEX, 0);
+        for (Integer i = 0; i < countSize; ++i) {
+        	String keyString = i.toString();
+        	tempStringArray.add(restore.getString(keyString, ""));
+        }
+		if (tempStringArray.isEmpty()) return null;
+		
+    	newCounter = setCounterArray(tempStringArray);
+    		
+    	return newCounter;
     }
     
+    private void saveToFile(ArrayList<Counter> saveCounter) {
+    	
+    	ArrayList<String> save = convertCounterArrayToStrings(saveCounter);
+    	SharedPreferences saving = getPreferences(0);
+        SharedPreferences.Editor editor = saving.edit();
+        editor.clear();
+        editor.putInt(NUM_COUNTERS, save.size());
+        editor.putInt(SAVE_INDEX, counterIndex);
+        for (Integer i = 0; i < save.size(); ++i) {
+        	String keyString = i.toString();
+        	editor.putString(keyString, save.get(i));
+        }
 
+        // Commit the edits!
+        editor.commit();
+    }
+    
+	public ArrayList<Counter> setCounterArray(ArrayList<String> stringArrayIn) {
+		ArrayList<Counter> tempArray = new ArrayList<Counter>();
+		
+			for (String str : stringArrayIn) {
+				String[] strSplit= str.split("%");
+				Counter newCounter = new Counter(strSplit[0]);
+				for (int i = 1; i < strSplit.length; ++i) {
+					newCounter.addTimeStamp(strSplit[i]);
+				}
+				tempArray.add(newCounter);
+			}
+			
+		return tempArray;
+	}
+	
+	public ArrayList<String> convertCounterArrayToStrings(ArrayList<Counter> counterA) {
+		
+		ArrayList<String> strOut = new ArrayList<String>();
+		for (Counter count : counterA) {
+			strOut.add(count.convertToString());
+		}
+		return strOut;
+	}
+
+	public void nextButton(View view) {
+		if (counterIndex > 0) {
+			counterIndex++;
+		}
+		counterArray.get(counterIndex).resetCount();
+		counterValue.setText(counterArray.get(counterIndex).getCount().toString());
+	}
+	
+	public void prevButton(View view) {
+		if (counterIndex >= counterArray.size() -1) {
+			counterIndex--;
+		}
+		counterArray.get(counterIndex).resetCount();
+		counterValue.setText(counterArray.get(counterIndex).getCount().toString());
+	}
     
     public void resetButton(View view) {
-    	counterArray.getCounter(counterIndex).resetCount();
-    	counterValue.setText(counterArray.getCounter(counterIndex).getCount().toString());
-    	counterArray.savePersistent(outputStream);
+    	if (counterIndex >= 0) {
+    		counterArray.get(counterIndex).resetCount();
+    		counterValue.setText(counterArray.get(counterIndex).getCount().toString());
+    		saveToFile(counterArray);
+    	}
     }
     
     public void incrementButton(View view) {
-    	counterArray.getCounter(counterIndex).incrementCount();
-    	counterValue.setText(counterArray.getCounter(counterIndex).getCount().toString());
-    	counterArray.savePersistent(outputStream);
+    	if (counterIndex >= 0) {
+    		counterArray.get(counterIndex).incrementCount();
+    		counterValue.setText(counterArray.get(counterIndex).getCount().toString());
+    		saveToFile(counterArray);
+    	}
+    }
+    
+    public void clearButton(View view) {
+    	SharedPreferences saving = getPreferences(0);
+        SharedPreferences.Editor editor = saving.edit();
+        editor.clear();
+        // Commit the edits!
+        editor.commit();
     }
 }

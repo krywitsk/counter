@@ -5,10 +5,14 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="reset_button">Reset</string>
-      <string name="counter_blank">Counter N</string>
-      <string name="count_num_blank">0</string>
-      <string name="increment_button">+</string>
-      <string name="action_new">New Counter</string>
-      <string name="action_remove">Remove Counter</string>
+    <string name="counter_blank">Counter N</string>
+    <string name="count_num_blank">0</string>
+    <string name="increment_button">+</string>
+    <string name="action_new">New Counter</string>
+    <string name="action_remove">Remove Counter</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="clear_button">Clear</string>
+    <string name="next_button">Next</string>
+    <string name="prev_button">Prev</string>
 
 </resources>
