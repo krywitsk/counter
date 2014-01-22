@@ -58,26 +58,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="56sp" />
 
-    <Button
-        android:id="@+id/nextButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/counter_name"
-        android:layout_marginTop="40dp"
-        android:text="@string/next_button"
-        android:onClick="nextButton" />
-
-    <Button
-        android:id="@+id/prevButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/nextButton"
-        android:layout_alignBottom="@+id/nextButton"
-        android:layout_alignLeft="@+id/counter_name"
-        android:text="@string/prev_button"
-        android:onClick="prevButton" />
+ 
 
 </RelativeLayout>
