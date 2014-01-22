@@ -58,6 +58,13 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="56sp" />
 
- 
+    <Button
+        android:id="@+id/selectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/counter_name"
+        android:layout_centerHorizontal="true"
+        android:text="@string/select_counter"
+        android:onClick="tempSelect" />
 
 </RelativeLayout>
