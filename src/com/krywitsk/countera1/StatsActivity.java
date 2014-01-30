@@ -14,7 +14,8 @@ import android.support.v4.app.NavUtils;
 
 public class StatsActivity extends Activity implements OnItemSelectedListener {
 
-	CounterArrayController countControl;
+	private CounterArrayController countControl;
+	private StatsGenerator statsGen;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class StatsActivity extends Activity implements OnItemSelectedListener {
 		spinner.setOnItemSelectedListener(this);
 		
 		countControl = new CounterArrayController(this);
+		statsGen = new StatsGenerator();
 	}
 	
 	/**
@@ -66,13 +68,29 @@ public class StatsActivity extends Activity implements OnItemSelectedListener {
 		return super.onOptionsItemSelected(item);
 	}
 
+	//handles selection from spinner
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
-		System.out.println(parent.getItemAtPosition(pos).toString());
+		String choice = parent.getItemAtPosition(pos).toString();
+		
+		//switch case cannot be used with string evidently
+		if (choice.equals("Month")) {
+			System.out.println("Month selected!");
+			String[] strList = statsGen.generateList(countControl.getCounterArrayList());
+		} else if (choice.equals("Week")) {
+			//
+		} else if (choice.equals("Day")) {
+			//
+		} else if (choice.equals("Hour")) {
+			//
+		}
+
+
 		
 	}
 
+	//handles nothing being clicked in the spinner
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// do nothing

@@ -27,6 +27,10 @@ public class Counter {
 		return timeStamps;
 	}
 	
+	public void addTimeStamp(Date dateIn) {
+		timeStamps.add(dateIn);
+	}
+	
 	public void addTimeStamp(String timeIn) {
 		timeStamps.add(new Date(timeIn));
 	}

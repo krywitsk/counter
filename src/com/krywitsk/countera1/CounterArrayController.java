@@ -43,6 +43,10 @@ public class CounterArrayController {
 		}
 	}
 	
+	public ArrayList<Counter> getCounterArrayList() {
+		return counterArray;
+	}
+	
 	//Generate every time??
 	public String[] getCounterNameArray() {
 		
