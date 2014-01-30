@@ -7,11 +7,11 @@ public class Counter {
 
 	//recording dates and times for each counter
 	private String name;
-	ArrayList<Date> timeStamps;
+	private ArrayList<Date> timeStamps;
 	
 	public Counter(String nameIn) {
 
-		this.name = nameIn;
+		this.name = new String(nameIn);
 		timeStamps = new ArrayList<Date>();
 	}
 	
@@ -40,7 +40,7 @@ public class Counter {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = new String(name);
 	}	
 
 	public String convertToString() {

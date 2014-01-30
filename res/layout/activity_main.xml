@@ -67,4 +67,14 @@
         android:text="@string/select_counter"
         android:onClick="tempSelect" />
 
+    <Button
+        android:id="@+id/statsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/selectButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/stats_button"
+        android:onClick="changeToStats" />
+
 </RelativeLayout>

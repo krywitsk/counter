@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="17" />
 
     <application
         android:allowBackup="true"
@@ -23,12 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.krywitsk.countera1.StartActivity"
-            android:label="@string/title_activity_start"
-            android:parentActivityName="com.krywitsk.countera1.MainActivity" >
+            android:name="com.krywitsk.countera1.StatsActivity"
+            android:label="@string/title_activity_stats"
+            android:parentActivityName="com.example.krywitsk.countera1.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.krywitsk.countera1.MainActivity" />
+                android:value="com.example.krywitsk.countera1.MainActivity" />
         </activity>
     </application>
 
