@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CounterA1</string>
+    <string name="app_name">krywitsk.CounterA1</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="reset_button">Reset</string>
@@ -13,7 +13,7 @@
     <string name="title_activity_start">StartActivity</string>
     <string name="clear_button">Clear</string>
     <string name="select_counter">Select Counter</string>
-    <string name="stats_button">Show Stats</string>
+    <string name="stats_button">Counter Stats</string>
     <string name="title_activity_stats">Stats  Activity</string>
     <string name="enter_new_name">Add New Counter</string>
     <string name="button_ok">OK</string>

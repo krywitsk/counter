@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.support.v4.app.NavUtils;
 
@@ -16,6 +17,7 @@ public class StatsActivity extends Activity implements OnItemSelectedListener {
 
 	private CounterArrayController countControl;
 	private StatsGenerator statsGen;
+	private ListView list;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,8 @@ public class StatsActivity extends Activity implements OnItemSelectedListener {
 		spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinAdapter);
 		spinner.setOnItemSelectedListener(this);
+		
+		list = (ListView) findViewById(R.id.stat_list_view);
 		
 		countControl = new CounterArrayController(this);
 		statsGen = new StatsGenerator();
@@ -73,20 +77,20 @@ public class StatsActivity extends Activity implements OnItemSelectedListener {
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
 		String choice = parent.getItemAtPosition(pos).toString();
-		
+		int which = 0;
 		//switch case cannot be used with string evidently
 		if (choice.equals("Month")) {
-			System.out.println("Month selected!");
-			String[] strList = statsGen.generateList(countControl.getCounterArrayList());
+			which = 3;
 		} else if (choice.equals("Week")) {
-			//
+			which = 2;
 		} else if (choice.equals("Day")) {
-			//
+			which = 1;
 		} else if (choice.equals("Hour")) {
-			//
+			which = 0;
 		}
 
-
+		String[] strList = statsGen.generateList(countControl.getCurrentCounter(), which);
+		list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, strList));
 		
 	}
 

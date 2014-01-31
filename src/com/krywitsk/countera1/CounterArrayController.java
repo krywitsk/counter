@@ -1,6 +1,7 @@
 package com.krywitsk.countera1;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,18 +15,17 @@ public class CounterArrayController {
 	public static final String NUM_COUNTERS = "numCounters";
 	public static final String CONTROLLER_PREFS = "prefs";
 	
-	private static ArrayList<Counter> counterArray;
+	private static Vector<Counter> counterArray;
 	Context context;
 	
 	public CounterArrayController(Context context) {
 		// TODO Auto-generated constructor stub
 		
 		this.context = context;
-		
-		ArrayList<Counter> loadedCounterArray = loadFromFile();
+		Vector<Counter> loadedCounterArray = loadFromFile();
 		if (loadedCounterArray == null) {
 			
-			counterArray = new ArrayList<Counter>();
+			counterArray = new Vector<Counter>();
 			countIndex = 0;
 			System.out.println("Creating New Data");
 
@@ -35,6 +35,7 @@ public class CounterArrayController {
 		}
 	}
 	
+	//return current couunter name
 	public String getCurrentCounterName() {
 		if (!(counterArray.isEmpty())) {
 			return counterArray.get(countIndex).getName();
@@ -43,15 +44,22 @@ public class CounterArrayController {
 		}
 	}
 	
-	public ArrayList<Counter> getCounterArrayList() {
+	public Vector<Counter> getCounterArrayList() {
 		return counterArray;
 	}
 	
-	//Generate every time??
+	//return current counter
+	public Counter getCurrentCounter() {
+		if (!(counterArray.isEmpty())) {
+			return counterArray.get(countIndex);
+		} else {
+			return null;
+		}
+	}
+	
+	//generate string array for counter list
 	public String[] getCounterNameArray() {
-		
 		String[] names = new String[counterArray.size()];
-
 		for (int i = 0; i < counterArray.size(); ++i) {
 			names[i] = counterArray.get(i).getName() + " - " + counterArray.get(i).getCount().toString();
 		}
@@ -59,6 +67,7 @@ public class CounterArrayController {
 		return names;
 	}
 	
+	//return count of currently selected counter
 	public String getCurrentCounterCount() {
 		if (!counterArray.isEmpty()) {
 			return counterArray.get(countIndex).getCount().toString();
@@ -94,7 +103,7 @@ public class CounterArrayController {
 		counterArray.add(new Counter(newName));
 		counterArray.add(new Counter(newName));
 
-		//DOESN"T MAKE ANY SENSE
+		//DOESNT MAKE ANY SENSE
 
 		for (Counter ct : counterArray) {
 			System.out.println(ct.getName());
@@ -116,9 +125,10 @@ public class CounterArrayController {
 		}
 	}
 	
-	 private ArrayList<Counter> loadFromFile() {
+	//load counter data from sharedpreferences into array
+	 private Vector<Counter> loadFromFile() {
 	    	
-		 ArrayList<Counter> tempArray = new ArrayList<Counter>();
+		 Vector<Counter> tempArray = new Vector<Counter>();
 	    	ArrayList<String> tempStringArray = new ArrayList<String>();
 	    	
 	        SharedPreferences restore = context.getSharedPreferences(CONTROLLER_PREFS, 0);
@@ -142,8 +152,9 @@ public class CounterArrayController {
 	    	return tempArray;
 	    }
 	 
-	 private void saveToFile(ArrayList<Counter> saveCounter) {
-	    	
+	 //save all counter data to shared preferences
+	 private void saveToFile(Vector<Counter> saveCounter) {
+		 	
 	   	ArrayList<String> save = convertCounterArrayToStrings(saveCounter);
 	   	SharedPreferences saving = context.getSharedPreferences(CONTROLLER_PREFS, 0);
 	   	SharedPreferences.Editor editor = saving.edit();
@@ -159,21 +170,21 @@ public class CounterArrayController {
 	    editor.commit();
 	    }
 	 
-		
-		private ArrayList<String> convertCounterArrayToStrings(ArrayList<Counter> counterA) {
+		//helper function
+	private ArrayList<String> convertCounterArrayToStrings(Vector<Counter> counterA) {
 			
-			ArrayList<String> strOut = new ArrayList<String>();
-			for (Counter count : counterA) {
-				strOut.add(count.convertToString());
-			}
-			return strOut;
+		ArrayList<String> strOut = new ArrayList<String>();
+		for (Counter count : counterA) {
+			strOut.add(count.convertToString());
 		}
+		return strOut;
+	}
 		
-		public void clearSaveData() {
-			SharedPreferences saving = context.getSharedPreferences(CONTROLLER_PREFS, 0);
-		   	SharedPreferences.Editor editor = saving.edit();
-		   	editor.clear();
-		   	editor.commit();
-		}
+	public void clearSaveData() {
+		SharedPreferences saving = context.getSharedPreferences(CONTROLLER_PREFS, 0);
+		SharedPreferences.Editor editor = saving.edit();
+		editor.clear();
+		editor.commit();
+	}
 
 }

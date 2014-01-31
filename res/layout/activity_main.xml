@@ -15,20 +15,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/resetButton"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/clear_button"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/counter_value"
         android:onClick="incrementButton"
         android:text="@string/increment_button"
         android:textSize="84sp" />
-
-    <Button
-        android:id="@+id/clear_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/resetButton"
-        android:layout_alignParentRight="true"
-        android:onClick="clearButton"
-        android:text="@string/clear_button" />
 
     <TextView
         android:id="@+id/counter_value"

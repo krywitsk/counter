@@ -113,7 +113,8 @@ public class MainActivity extends Activity  {
     	builder.show();
     }
     
-    public void updateTextViews() {
+   
+    private void updateTextViews() {
 		counterName.setText(countControl.getCurrentCounterName());
 		counterValue.setText(countControl.getCurrentCounterCount());
     }
@@ -149,10 +150,6 @@ public class MainActivity extends Activity  {
     public void tempSelect(View view) {
        	createListDialog();
        	
-    }
-    
-    public void clearButton(View view) {
-    	countControl.clearSaveData();
     }
     
     public void changeToStats(View view) {
