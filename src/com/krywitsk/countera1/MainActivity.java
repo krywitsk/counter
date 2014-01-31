@@ -16,8 +16,6 @@ public class MainActivity extends Activity  {
 	private TextView counterValue;
 	private TextView counterName;
 	
-	private EditText alertIn;
-	
 	private CounterArrayController countControl;
 
 	@Override
@@ -153,18 +151,23 @@ public class MainActivity extends Activity  {
     }
     
     public void tempSelect(View view) {
+    	if (!countControl.isArrayListEmpty()) {
        	createListDialog();
-       	
+    	}
     }
     
     //start stats activity
     public void changeToStats(View view) {
-    	Intent intent = new Intent(this, StatsActivity.class);
-    	startActivity(intent);
+    	if (!countControl.isArrayListEmpty()) {
+    		Intent intent = new Intent(this, StatsActivity.class);
+    		startActivity(intent);
+    	}
     }
     
     public void editName(View view) {
-    	createInputDialog(true);
+    	if (!countControl.isArrayListEmpty()) {
+    		createInputDialog(true);
+    	}
     }
 
 }

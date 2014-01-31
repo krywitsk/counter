@@ -27,10 +27,10 @@ public class CounterArrayController {
 			
 			counterArray = new ArrayList<Counter>();
 			countIndex = 0;
-			System.out.println("Creating New Data");
+			//System.out.println("Creating New Data");
 
 		} else {
-			System.out.println("Restoring Data");
+			//System.out.println("Restoring Data");
 			counterArray = loadedCounterArray;
 		}
 	}
@@ -42,6 +42,10 @@ public class CounterArrayController {
 		} else {
 			return "_ _ _";
 		}
+	}
+	
+	public boolean isArrayListEmpty() {
+		return counterArray.isEmpty();
 	}
 	
 	public ArrayList<Counter> getCounterArrayList() {
@@ -117,6 +121,7 @@ public class CounterArrayController {
 		if (!counterArray.isEmpty()) {
 			counterArray.get(countIndex).setName(newName);
 		}
+		saveToFile(counterArray);
 	}
 	
 	//create a new counter and append it to the list

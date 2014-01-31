@@ -1,6 +1,6 @@
 package com.krywitsk.countera1;
 
-import java.text.DateFormatSymbols;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,11 +21,7 @@ public class StatsGenerator {
 								
 				Date temp = counter.getTimeStamps().get(0);
 				times.add(counter.getTimeStamps().get(0));
-				
-				//required to get String for month integer
-			      DateFormatSymbols dateFormat = new DateFormatSymbols();
-			      String[] monthFormat = dateFormat.getMonths();
-			      String[] dayFormat = dateFormat.getWeekdays();
+
 
 				//compare rest of timestamps with first
 				int count = 0;
