@@ -26,6 +26,7 @@ public class StatsActivity extends Activity implements OnItemSelectedListener {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
+		//create spinner for time selection
 		Spinner spinner = (Spinner) findViewById(R.id.time_spinner);
 		ArrayAdapter<CharSequence> spinAdapter = ArrayAdapter.createFromResource(this, R.array.time_selection_strings, android.R.layout.simple_spinner_item);
 		spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

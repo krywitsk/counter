@@ -1,6 +1,5 @@
 package com.krywitsk.countera1;
 
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,10 +13,10 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity  {
 
-	TextView counterValue;
-	TextView counterName;
+	private TextView counterValue;
+	private TextView counterName;
 	
-	EditText alertIn;
+	private EditText alertIn;
 	
 	private CounterArrayController countControl;
 
@@ -33,14 +32,6 @@ public class MainActivity extends Activity  {
     	updateTextViews();
 		
 	}
-	/*
-	@Override
-	protected void onStart() {
-		super.onStart();
-		
-		//countControl = new CounterArrayController(this);
-	}
-	*/
 	
 	@Override
 	protected void onPause() {
@@ -55,7 +46,7 @@ public class MainActivity extends Activity  {
 	}
 
 
-    public void createListDialog() {
+    private void createListDialog() {
         // Not sure if creating a new dialog every time is more efficient
     	//Array adapter might be less expensive
     	
@@ -63,7 +54,6 @@ public class MainActivity extends Activity  {
     	
     	//TO FIX ARRAYLIST ADD BUG
     	//String[] strNames = new String[str.length-1];
-    	
     	
         //adapter.notifyDataSetChanged();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -81,39 +71,53 @@ public class MainActivity extends Activity  {
         builder.show();
     }
     
-    
-    public void createInputDialog() {
+    //create dialog for entering new counter name
+    public void createInputDialog(boolean edit) {
     	
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setTitle(R.string.enter_new_name);
-    	builder.setMessage("Enter name"); //decide if string resource needed
-    	
+    	if (edit) {
+    		builder.setTitle(R.string.edit_name);
+    		builder.setMessage(R.string.enter_name); //decide if string resource needed
+    	} else {
+    		builder.setTitle(R.string.enter_new_name);
+    		builder.setMessage(R.string.enter_name); //decide if string resource needed
+    	}
     	
     	final EditText inputText = new EditText(this);
     	builder.setView(inputText);
     	
-    	builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-    		public void onClick(DialogInterface dialog, int which) {
-    			String str = inputText.getText().toString();
-            	if (!(str.isEmpty())) {
-            		countControl.addNewCounter(str);
-            		updateTextViews();
-            	}
-    			
-    		}
-    	}); 
+    	if (edit) {
+    		builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int which) {
+    				String str = inputText.getText().toString();
+    				if (!(str.isEmpty())) {
+    					countControl.editCurrentName(str);
+    					updateTextViews();
+    				}
+    			}
+    		});
+    	} else {
+    		builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int which) {
+    				String str = inputText.getText().toString();
+    				if (!(str.isEmpty())) {
+    					countControl.addNewCounter(str);
+    					updateTextViews();
+    				}
+    			}
+    		});
+    	}
     	
     	builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
     		public void onClick(DialogInterface dialog, int which) {
     			
     		}
     	}); 
-    	
     	builder.create();
     	builder.show();
     }
     
-   
+    //refresh counter name and count textviews
     private void updateTextViews() {
 		counterName.setText(countControl.getCurrentCounterName());
 		counterValue.setText(countControl.getCurrentCounterCount());
@@ -125,7 +129,7 @@ public class MainActivity extends Activity  {
         // Handle presses on the action bar items
         switch (item.getItemId()) { 
             case R.id.add_new_counter:
-            	createInputDialog();
+            	createInputDialog(false);
             
             case R.id.remove_counter:
             	countControl.removeCurrentCounter();
@@ -137,6 +141,7 @@ public class MainActivity extends Activity  {
     }
 
     
+    //handle button presses
     public void resetButton(View view) {
     	countControl.resetCurrentCounter();
     	updateTextViews();
@@ -152,9 +157,14 @@ public class MainActivity extends Activity  {
        	
     }
     
+    //start stats activity
     public void changeToStats(View view) {
     	Intent intent = new Intent(this, StatsActivity.class);
     	startActivity(intent);
+    }
+    
+    public void editName(View view) {
+    	createInputDialog(true);
     }
 
 }

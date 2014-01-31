@@ -2,9 +2,8 @@ package com.krywitsk.countera1;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 
 //generates proper stats list from a counter array 
 public class StatsGenerator {
@@ -13,8 +12,8 @@ public class StatsGenerator {
 		
 		//timeType = 0 1 2 3 for Hour, Day, Week, Month, respectively
 		
-		Vector<Date> times = new Vector<Date>();
-		Vector<Integer> counts = new Vector<Integer>();
+		ArrayList<Date> times = new ArrayList<Date>();
+		ArrayList<Integer> counts = new ArrayList<Integer>();
 			
 		if (counter != null) {
 			//get first date

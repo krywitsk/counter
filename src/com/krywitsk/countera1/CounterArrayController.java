@@ -1,11 +1,11 @@
 package com.krywitsk.countera1;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
+//controls access to the array of counter objects
 public class CounterArrayController {
 
 	private static int countIndex;
@@ -15,17 +15,17 @@ public class CounterArrayController {
 	public static final String NUM_COUNTERS = "numCounters";
 	public static final String CONTROLLER_PREFS = "prefs";
 	
-	private static Vector<Counter> counterArray;
+	private static ArrayList<Counter> counterArray;
 	Context context;
 	
 	public CounterArrayController(Context context) {
-		// TODO Auto-generated constructor stub
-		
+	
+		//try to load old counter data, generate new array if old data does not exist
 		this.context = context;
-		Vector<Counter> loadedCounterArray = loadFromFile();
+		ArrayList<Counter> loadedCounterArray = loadFromFile();
 		if (loadedCounterArray == null) {
 			
-			counterArray = new Vector<Counter>();
+			counterArray = new ArrayList<Counter>();
 			countIndex = 0;
 			System.out.println("Creating New Data");
 
@@ -35,7 +35,7 @@ public class CounterArrayController {
 		}
 	}
 	
-	//return current couunter name
+	//return current counter name as a string
 	public String getCurrentCounterName() {
 		if (!(counterArray.isEmpty())) {
 			return counterArray.get(countIndex).getName();
@@ -44,7 +44,7 @@ public class CounterArrayController {
 		}
 	}
 	
-	public Vector<Counter> getCounterArrayList() {
+	public ArrayList<Counter> getCounterArrayList() {
 		return counterArray;
 	}
 	
@@ -59,9 +59,21 @@ public class CounterArrayController {
 	
 	//generate string array for counter list
 	public String[] getCounterNameArray() {
-		String[] names = new String[counterArray.size()];
-		for (int i = 0; i < counterArray.size(); ++i) {
-			names[i] = counterArray.get(i).getName() + " - " + counterArray.get(i).getCount().toString();
+		
+		String[] names;
+		
+		//to work around list bug ##############
+		//cut last element off so duplicate is not displayed
+		if (counterArray.size() > 1) {
+			names = new String[counterArray.size()-1];
+			for (int i = 0; i < counterArray.size()-1; ++i) {
+				names[i] = counterArray.get(i).getName() + " - " + counterArray.get(i).getCount().toString();
+			}
+		} else {
+			names = new String[counterArray.size()];
+			for (int i = 0; i < counterArray.size(); ++i) {
+				names[i] = counterArray.get(i).getName() + " - " + counterArray.get(i).getCount().toString();
+			}
 		}
 		
 		return names;
@@ -76,6 +88,7 @@ public class CounterArrayController {
 		}
 	}
 	
+	//jump to a specific counter in the array
 	public void setCurrentCounterInd(int index) {
 		if (index >= 0 && index < (counterArray.size())) {
 			countIndex = index;
@@ -83,6 +96,7 @@ public class CounterArrayController {
 		saveToFile(counterArray);
 	}
 	
+	//increment counter by 1
 	public void incrementCurrentCounter() {
 		if (!counterArray.isEmpty()) {
 			counterArray.get(countIndex).incrementCount();
@@ -90,6 +104,7 @@ public class CounterArrayController {
 		}
 	}
 	
+	//set count to 0
 	public void resetCurrentCounter() {
 		if (!counterArray.isEmpty()) {
 			counterArray.get(countIndex).resetCount();
@@ -97,23 +112,26 @@ public class CounterArrayController {
 		} 
 	}
 	
+	//edit current counter name
+	public void editCurrentName(String newName) {
+		if (!counterArray.isEmpty()) {
+			counterArray.get(countIndex).setName(newName);
+		}
+	}
+	
+	//create a new counter and append it to the list
 	public void addNewCounter(String newName) {
 			
 		//WHY MUST WE ADD TWICE - COUNTERS DON'T ADD OTHERWISE
 		counterArray.add(new Counter(newName));
 		counterArray.add(new Counter(newName));
-
 		//DOESNT MAKE ANY SENSE
-
-		for (Counter ct : counterArray) {
-			System.out.println(ct.getName());
-		}
-		
+	
 		countIndex = (counterArray.size() - 1);
-
 		saveToFile(counterArray);
 	}
 	
+	//delete the currently selected counter from the list
 	public void removeCurrentCounter() {
 		if (counterArray.size() > 0) {
 
@@ -126,9 +144,9 @@ public class CounterArrayController {
 	}
 	
 	//load counter data from sharedpreferences into array
-	 private Vector<Counter> loadFromFile() {
+	 private ArrayList<Counter> loadFromFile() {
 	    	
-		 Vector<Counter> tempArray = new Vector<Counter>();
+		 ArrayList<Counter> tempArray = new ArrayList<Counter>();
 	    	ArrayList<String> tempStringArray = new ArrayList<String>();
 	    	
 	        SharedPreferences restore = context.getSharedPreferences(CONTROLLER_PREFS, 0);
@@ -153,7 +171,7 @@ public class CounterArrayController {
 	    }
 	 
 	 //save all counter data to shared preferences
-	 private void saveToFile(Vector<Counter> saveCounter) {
+	 private void saveToFile(ArrayList<Counter> saveCounter) {
 		 	
 	   	ArrayList<String> save = convertCounterArrayToStrings(saveCounter);
 	   	SharedPreferences saving = context.getSharedPreferences(CONTROLLER_PREFS, 0);
@@ -171,7 +189,7 @@ public class CounterArrayController {
 	    }
 	 
 		//helper function
-	private ArrayList<String> convertCounterArrayToStrings(Vector<Counter> counterA) {
+	private ArrayList<String> convertCounterArrayToStrings(ArrayList<Counter> counterA) {
 			
 		ArrayList<String> strOut = new ArrayList<String>();
 		for (Counter count : counterA) {
@@ -179,12 +197,6 @@ public class CounterArrayController {
 		}
 		return strOut;
 	}
-		
-	public void clearSaveData() {
-		SharedPreferences saving = context.getSharedPreferences(CONTROLLER_PREFS, 0);
-		SharedPreferences.Editor editor = saving.edit();
-		editor.clear();
-		editor.commit();
-	}
+	
 
 }

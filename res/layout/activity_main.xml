@@ -68,4 +68,13 @@
         android:text="@string/stats_button"
         android:onClick="changeToStats" />
 
+    <Button
+        android:id="@+id/editName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/resetButton"
+        android:layout_alignBottom="@+id/resetButton"
+        android:layout_alignRight="@+id/increment_button"
+        android:text="@string/edit_name" />
+
 </RelativeLayout>

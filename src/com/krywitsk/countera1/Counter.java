@@ -1,18 +1,18 @@
 package com.krywitsk.countera1;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 
 public class Counter {
 
 	//recording dates and times for each counter
 	private String name;
-	private Vector<Date> timeStamps;
+	private ArrayList<Date> timeStamps;
 	
 	public Counter(String nameIn) {
 
 		this.name = new String(nameIn);
-		timeStamps = new Vector<Date>();
+		timeStamps = new ArrayList<Date>();
 	}
 	
 	public void incrementCount() {
@@ -23,7 +23,7 @@ public class Counter {
 		return timeStamps.size();
 	}
 	
-	public Vector<Date> getTimeStamps() {
+	public ArrayList<Date> getTimeStamps() {
 		return timeStamps;
 	}
 	
