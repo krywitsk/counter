@@ -50,15 +50,6 @@
         android:textSize="56sp" />
 
     <Button
-        android:id="@+id/selectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/counter_name"
-        android:layout_centerHorizontal="true"
-        android:text="@string/select_counter"
-        android:onClick="tempSelect" />
-
-    <Button
         android:id="@+id/statsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,12 +60,22 @@
         android:onClick="changeToStats" />
 
     <Button
+        android:id="@+id/selectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/counter_name"
+        android:layout_centerHorizontal="true"
+        android:onClick="tempSelect"
+        android:text="@string/select_counter" />
+
+    <Button
         android:id="@+id/editName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/resetButton"
         android:layout_alignBottom="@+id/resetButton"
         android:layout_alignRight="@+id/increment_button"
+        android:onClick="editName"
         android:text="@string/edit_name" />
 
 </RelativeLayout>
